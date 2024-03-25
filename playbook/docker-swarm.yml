@@ -1,0 +1,35 @@
+---
+- name: Configure Docker swarm cluster
+  hosts: '{{ lookup("env", "HOSTS") | default("local") }}'
+  become: true
+  tasks:
+  - name: Select Init Host
+    set_fact:
+      docker_swarm_init_host: true
+    run_once: true
+    delegate_to: '{{ inventory_hostname }}'
+    delegate_facts: true
+  - name: Set init_host_advertise_addr
+    set_fact:
+      init_host_advertise_addr: '{{ ansible_default_ipv4.address }}'
+    when: docker_swarm_init_host is defined
+    run_once: true
+  - name: Init
+    docker_swarm:
+      state: present
+      advertise_addr: '{{ init_host_advertise_addr }}'
+    register: init_result
+    when: docker_swarm_init_host is defined
+    run_once: true
+  - name: Set Join Tokens
+    set_fact:
+      join_token_manager: '{{ init_result.swarm_facts.JoinTokens.Manager }}'
+    run_once: true
+  - name: Join
+    docker_swarm:
+      state: join
+      advertise_addr: '{{ ansible_default_ipv4.address }}'
+      join_token: '{{ join_token_manager }}'
+      remote_addrs:
+        - '{{ init_host_advertise_addr }}'
+    when: docker_swarm_init_host is not defined
