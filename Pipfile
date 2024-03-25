@@ -3,6 +3,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[scripts]
+docker = "ansible-playbook -i inventories/inventory.yml playbook/docker.yml"
+docker-swarm = "ansible-playbook -i inventories/inventory.yml playbook/docker-swarm.yml"
+
 [packages]
 ansible = "*"
 
