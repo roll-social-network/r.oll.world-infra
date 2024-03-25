@@ -1,0 +1,6 @@
+prod: {}
+local:
+  vars:
+    config_dir: /home/roll/config
+  hosts:
+    s[1:2:1].roll.local: {}
