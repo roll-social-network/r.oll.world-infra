@@ -1,6 +1,6 @@
 ---
 - name: Install Docker
-  hosts: '{{ lookup("env", "HOSTS") | default("local") }}'
+  hosts: servers
   become: true
   tasks:
   - name: Install aptitude

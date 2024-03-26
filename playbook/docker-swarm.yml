@@ -1,6 +1,6 @@
 ---
 - name: Configure Docker swarm cluster
-  hosts: '{{ lookup("env", "HOSTS") | default("local") }}'
+  hosts: servers
   become: true
   tasks:
   - name: Set Managers Advertise Addr
