@@ -3,33 +3,36 @@
   hosts: '{{ lookup("env", "HOSTS") | default("local") }}'
   become: true
   tasks:
-  - name: Select Init Host
-    set_fact:
-      docker_swarm_init_host: true
-    run_once: true
-    delegate_to: '{{ inventory_hostname }}'
-    delegate_facts: true
-  - name: Set init_host_advertise_addr
-    set_fact:
-      init_host_advertise_addr: '{{ ansible_default_ipv4.address }}'
-    when: docker_swarm_init_host is defined
-    run_once: true
-  - name: Init
+  - name: Init Swarm
     docker_swarm:
       state: present
-      advertise_addr: '{{ init_host_advertise_addr }}'
+      advertise_addr: '{{ ansible_default_ipv4.address }}'
     register: init_result
-    when: docker_swarm_init_host is defined
     run_once: true
+    when: docker_swarm_manager_host is defined
   - name: Set Join Tokens
     set_fact:
       join_token_manager: '{{ init_result.swarm_facts.JoinTokens.Manager }}'
+      join_token_worker: '{{ init_result.swarm_facts.JoinTokens.Worker }}'
     run_once: true
-  - name: Join
+  - name: Init Managers Remote Addrs
+    set_fact:
+      manager_remote_addrs: []
+    run_once: true
+  - name: Set Managers Remote Addrs
+    set_fact:
+      manager_remote_addrs: '{{ manager_remote_addrs + [ansible_default_ipv4.address] }}'
+  - name: Join Managers
     docker_swarm:
       state: join
       advertise_addr: '{{ ansible_default_ipv4.address }}'
       join_token: '{{ join_token_manager }}'
-      remote_addrs:
-        - '{{ init_host_advertise_addr }}'
-    when: docker_swarm_init_host is not defined
+      remote_addrs: '{{ manager_remote_addrs }}'
+    when: docker_swarm_manager_host is defined
+  - name: Join Workers
+    docker_swarm:
+      state: join
+      advertise_addr: '{{ ansible_default_ipv4.address }}'
+      join_token: '{{ join_token_worker }}'
+      remote_addrs: '{{ manager_remote_addrs }}'
+    when: docker_swarm_manager_host is not defined
