@@ -9,6 +9,7 @@ docker-swarm = "ansible-playbook -i inventories/inventory.yml playbook/docker-sw
 
 [packages]
 ansible = "*"
+requests = "*"
 
 [dev-packages]
 
