@@ -41,6 +41,10 @@
     template:
       src: config/haproxy.cfg
       dest: '{{ config_dir }}/haproxy.cfg'
+  - name: File - NGINX Medias Config File
+    template:
+      src: config/nginx.medias.default.conf
+      dest: '{{ config_dir }}/nginx.medias.default.conf'
   - name: File - Set Replication pg_hba.conf Script
     template:
       src: docker-entrypoint-initdb.d/replication_pg_hba.sh
@@ -108,6 +112,14 @@
       hostname: '{{ hostvars.get(item).ansible_hostname }}'
       labels:
         db_mode: '{{ hostvars.get(item).get("db_mode", "unset") }}'
+    run_once: true
+    when: docker_swarm_manager_host is defined
+    with_items: '{{ play_hosts }}'
+  - name: Set roll_storage node label
+    docker_node:
+      hostname: '{{ hostvars.get(item).ansible_hostname }}'
+      labels:
+        roll_storage: '{{ hostvars.get(item).get("roll_storage", "unset") }}'
     run_once: true
     when: docker_swarm_manager_host is defined
     with_items: '{{ play_hosts }}'

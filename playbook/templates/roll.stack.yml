@@ -11,6 +11,9 @@ services:
     image: {{ docker_app_image_name }}:{{ docker_app_image_tag }}
     ports:
     - 8000:8000
+    depends_on:
+      - db
+      - mds1-ftp
     environment:
       # DEBUG: 1
       # SITE_ID: 1
@@ -19,11 +22,17 @@ services:
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}
       CORS_ALLOWED_ORIGIN_REGEXES: "^http://\\w+\\.{{ roll_subdomain_base }}$$,^http://{{ roll_subdomain_base }}$$"
       STATIC_URL: http://statics.{{ roll_subdomain_base }}/
+      MEDIA_URL: http://mds1.{{ roll_subdomain_base }}/
       CSP_CONNECT_SRC: "'self',{{ roll_subdomain_base }},*.{{ roll_subdomain_base }}"
       CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',statics.{{ roll_subdomain_base }},fonts.googleapis.com"
       CSP_FONT_SRC: "'self',statics.{{ roll_subdomain_base }},fonts.gstatic.com"
       CSP_SCRIPT_SRC: "'self','unsafe-eval',statics.{{ roll_subdomain_base }}"
-      CSP_IMG_SRC: "'self',statics.{{ roll_subdomain_base }},medias.{{ roll_subdomain_base }}"
+      CSP_IMG_SRC: "'self',statics.{{ roll_subdomain_base }},mds1.{{ roll_subdomain_base }}"
+      STORAGES_DEFAULT_BACKEND: storages.backends.ftp.FTPStorage
+      STORAGES_POSTS_BACKEND: storages.backends.ftp.FTPStorage
+      THUMBNAIL_DEFAULT_STORAGE: storages.backends.ftp.FTPStorage
+      FTP_STORAGE_LOCATION: ftp://roll:roll@mds1-ftp:21
+      MEDIA_PATH_AS_NGINX_ACCEL: 1
     deploy:
       replicas: 2
   db:
@@ -68,9 +77,33 @@ services:
     image: {{ docker_statics_image_name }}:{{ docker_statics_image_tag }}
     deploy:
       mode: global
+  mds1-ftp:
+    image: garethflowers/ftp-server:latest
+    environment:
+      - FTP_PASS=roll
+      - FTP_USER=roll
+    volumes:
+      - mds1-data:/home/roll/
+    deploy:
+      placement:
+        constraints:
+        - node.labels.roll_storage == mds1
+  mds1:
+    image: nginx:latest
+    volumes:
+      - mds1-data:/usr/share/nginx/html/:ro
+      - {{ config_dir }}/nginx.medias.default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+        - node.labels.roll_storage == mds1
 
 volumes:
   db-data: {}
+  mds1-data: {}
 
 networks:
   db:
