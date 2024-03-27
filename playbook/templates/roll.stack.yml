@@ -1,0 +1,78 @@
+services:
+  proxy:
+    image: haproxy:latest
+    ports:
+    - 80:80
+    volumes:
+    - {{ config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    deploy:
+      mode: global
+  app:
+    image: {{ docker_app_image_name }}:{{ docker_app_image_tag }}
+    ports:
+    - 8000:8000
+    environment:
+      # DEBUG: 1
+      # SITE_ID: 1
+      DATABASES_DEFAULT: postgres://roll:roll@db/roll
+      SESSION_COOKIE_DOMAIN: .{{ roll_subdomain_base }}
+      SUBDOMAIN_BASE: {{ roll_subdomain_base }}
+      CORS_ALLOWED_ORIGIN_REGEXES: "^http://\\w+\\.{{ roll_subdomain_base }}$$,^http://{{ roll_subdomain_base }}$$"
+      STATIC_URL: http://statics.{{ roll_subdomain_base }}/
+      CSP_CONNECT_SRC: "'self',{{ roll_subdomain_base }},*.{{ roll_subdomain_base }}"
+      CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',statics.{{ roll_subdomain_base }},fonts.googleapis.com"
+      CSP_FONT_SRC: "'self',statics.{{ roll_subdomain_base }},fonts.gstatic.com"
+      CSP_SCRIPT_SRC: "'self','unsafe-eval',statics.{{ roll_subdomain_base }}"
+      CSP_IMG_SRC: "'self',statics.{{ roll_subdomain_base }},medias.{{ roll_subdomain_base }}"
+    deploy:
+      replicas: 2
+  db:
+    image: postgres:latest
+    volumes:
+    - db-data:/var/lib/postgresql/data
+    - {{ config_dir }}/docker-entrypoint-initdb.d-replication_pg_hba.sh:/docker-entrypoint-initdb.d/replication_pg_hba.sh:ro
+    environment:
+      POSTGRES_USER: roll
+      POSTGRES_PASSWORD: roll
+      POSTGRES_DB: roll
+    command:
+    - --wal_level=replica
+    networks:
+    - default
+    - db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+        - node.labels.db_mode == primary
+  db-standby:
+    image: postgres:latest
+    volumes:
+    - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: roll
+      POSTGRES_PASSWORD: roll
+      POSTGRES_DB: roll
+      POSTGRES_PRIMARY_HOST: db
+    command:
+    - --primary_conninfo=postgres://roll:roll@db/roll
+    - --wal_level=replica
+    networks:
+    - db
+    deploy:
+      mode: global
+      placement:
+        constraints:
+        - node.labels.db_mode == standby
+  statics:
+    image: {{ docker_statics_image_name }}:{{ docker_statics_image_tag }}
+    deploy:
+      mode: global
+
+volumes:
+  db-data: {}
+
+networks:
+  db:
+    name: roll_db
+    external: true

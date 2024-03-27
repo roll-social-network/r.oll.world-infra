@@ -1,0 +1,139 @@
+---
+- name: Build Docker Images
+  hosts: localhost
+  tasks:
+  - name: Docker Login
+    docker_login:
+      username: '{{ docker_login_username }}'
+      password: '{{ docker_login_password }}'
+  - name: Build app image
+    docker_image:
+      build:
+        path: ../app
+        dockerfile: ../Dockerfile.app
+      name: '{{ docker_app_image_name }}'
+      tag: '{{ docker_app_image_tag }}'
+      push: true
+      source: build
+  - name: Build statics image
+    docker_image:
+      build:
+        path: ../app
+        dockerfile: ../Dockerfile.statics
+      name: '{{ docker_statics_image_name }}'
+      tag: '{{ docker_statics_image_tag }}'
+      push: true
+      source: build
+
+- name: Deploy stack
+  hosts: servers
+  become: true
+  tasks:
+  - name: Create config dir
+    file:
+      path: '{{ config_dir }}'
+      state: directory
+  - name: Create scripts dir
+    file:
+      path: '{{ scripts_dir }}'
+      state: directory
+  - name: File - HAProxy Config File
+    template:
+      src: config/haproxy.cfg
+      dest: '{{ config_dir }}/haproxy.cfg'
+  - name: File - Set Replication pg_hba.conf Script
+    template:
+      src: docker-entrypoint-initdb.d/replication_pg_hba.sh
+      dest: '{{ config_dir }}/docker-entrypoint-initdb.d-replication_pg_hba.sh'
+    when: db_mode == "primary"
+  - name: File - Init Standby Script
+    template:
+      src: scripts/init_{{ item }}.sh
+      dest: '{{ scripts_dir }}/init_{{ item }}.sh'
+    when: db_mode == item
+    with_items:
+    - primary
+    - standby
+  - name: Create roll_db-data Volume on DB Nodes
+    docker_volume:
+      name: roll_db-data
+    when: db_mode is defined
+  - name: Create roll_db network
+    docker_network:
+      name: roll_db
+      attachable: true
+      driver: overlay
+    when: docker_swarm_manager_host is defined
+    run_once: true
+  - name: Get db_mode file content
+    shell:
+      cmd: 'cat {{ config_dir }}/db_mode || exit 0'
+    register: current_db_mode
+    when: db_mode is defined
+  - name: Init DB Mode Nodes
+    docker_container:
+      name: 'init-{{ item }}'
+      image: postgres:latest
+      detach: false
+      interactive: true
+      network_mode: roll_db
+      mounts:
+      - source: roll_db-data
+        target: /var/lib/postgresql/data
+      - source: '{{ scripts_dir }}/init_{{ item }}.sh'
+        target: '/init_{{ item }}.sh'
+        type: bind
+      env:
+        PGDATA: /var/lib/postgresql/data
+        POSTGRES_PRIMARY_HOST: db
+        POSTGRES_USER: roll
+      entrypoint:
+      - sh
+      command:
+      - '/init_{{ item }}.sh'
+    when: db_mode == item and current_db_mode.stdout != item
+    with_items:
+    - primary
+    - standby
+  - name: Set db_mode File Content
+    copy:
+      dest: '{{ config_dir }}/db_mode'
+      content: '{{ item }}'
+    when: db_mode == item and current_db_mode.stdout != item
+    with_items:
+    - primary
+    - standby
+  - name: Set db_mode node label
+    docker_node:
+      hostname: '{{ hostvars.get(item).ansible_hostname }}'
+      labels:
+        db_mode: '{{ hostvars.get(item).get("db_mode", "unset") }}'
+    run_once: true
+    when: docker_swarm_manager_host is defined
+    with_items: '{{ play_hosts }}'
+  - name: Select Stack Deploy Host
+    set_fact:
+      stack_deploy_host: true
+    run_once: true
+    delegate_to: '{{ inventory_hostname }}'
+    delegate_facts: true
+  - name: Create roll.yml temporary file
+    tempfile: {}
+    register: roll_file
+    when: stack_deploy_host is defined
+    run_once: true
+  - name: Create roll.yml
+    template:
+      src: roll.stack.yml
+      dest: '{{ roll_file.path }}'
+    when: stack_deploy_host is defined
+    run_once: true
+  - name: Deploy stack
+    docker_stack:
+      state: present
+      name: roll
+      compose:
+        - '{{ roll_file.path }}'
+    when: stack_deploy_host is defined
+    run_once: true
+
