@@ -14,6 +14,7 @@ services:
     depends_on:
       - db
       - mds1-ftp
+      - channel-layer-redis
     environment:
       # DEBUG: 1
       # SITE_ID: 1
@@ -33,6 +34,13 @@ services:
       THUMBNAIL_DEFAULT_STORAGE: storages.backends.ftp.FTPStorage
       FTP_STORAGE_LOCATION: ftp://roll:roll@mds1-ftp:21
       MEDIA_PATH_AS_NGINX_ACCEL: 1
+      CHANNEL_LAYERS_DEFAULT_BACKEND: channels_redis.core.RedisChannelLayer
+      CHANNEL_LAYERS_DEFAULT_CONFIG: >
+        {
+          "hosts": [
+            ["channel-layer-redis", 6379]
+          ]
+        }
     deploy:
       replicas: 2
   db:
@@ -100,6 +108,8 @@ services:
       placement:
         constraints:
         - node.labels.roll_storage == mds1
+  channel-layer-redis:
+    image: redis:alpine
 
 volumes:
   db-data: {}
