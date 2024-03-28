@@ -1,4 +1,7 @@
 ---
+roll_subdomain_base: '{{ lookup("env", "ROLL_SUBDOMAIN_BASE") }}'
+config_dir: '{{ lookup("env", "CONFIG_DIR") | default("/roll/config") }}'
+scripts_dir: '{{ lookup("env", "SCRIPTS_DIR") | default("/roll/scripts") }}'
 docker_login_username: '{{ lookup("env", "DOCKER_REGISTRY_USERNAME") }}'
 docker_login_password: '{{ lookup("env", "DOCKER_REGISTRY_PASSWORD") }}'
 docker_app_image_name: dougppaz/r.oll.world-app
