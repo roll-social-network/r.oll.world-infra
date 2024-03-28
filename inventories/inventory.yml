@@ -1,1 +1,12 @@
-servers: {}
+servers:
+  hosts:
+    vps-16507529.servers.r.oll.world:
+      ansible_ssh_user: ubuntu
+      advertise_addr: 51.79.84.91
+      docker_swarm_manager_host: true
+    vps-9d706477.servers.r.oll.world:
+      ansible_ssh_user: ubuntu
+      advertise_addr: 144.217.240.162
+    vps-acf71116.servers.r.oll.world:
+      ansible_ssh_user: ubuntu
+      advertise_addr: 144.217.243.18

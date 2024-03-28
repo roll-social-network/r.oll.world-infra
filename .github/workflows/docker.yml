@@ -1,0 +1,23 @@
+name: Play Docker
+
+on: workflow_dispatch
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run Docker
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: playbook/docker.yml
+        key: ${{secrets.SSH_PRIVATE_KEY}}
+        options: |
+          -e @variables.yml
+          -i inventories/inventory.yml
+        known_hosts: |
+          vps-16507529.servers.r.oll.world ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJ9uWhbqfUmpQC97ltAAbdWl9GpAoK4OllCTWenHnEX
+          vps-9d706477.servers.r.oll.world ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVbM5pfoG8fudLH2C02l3Zn+XO/ub4qwymZhQXD0ktO
+          vps-acf71116.servers.r.oll.world ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID8tAXxIN5OvimPRcz7xWhhQWwy8ThtaWqP4Arp5dfq2
+
