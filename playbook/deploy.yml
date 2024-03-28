@@ -33,31 +33,22 @@
     file:
       path: '{{ config_dir }}'
       state: directory
+  - name: Render template files
+    template:
+      src: '{{ item.src }}'
+      dest: '{{ config_dir }}/{{ item.path }}'
+    with_filetree: ../config/
+    when: item.state == 'file'
   - name: Create scripts dir
     file:
       path: '{{ scripts_dir }}'
       state: directory
-  - name: File - HAProxy Config File
-    template:
-      src: config/haproxy.cfg
-      dest: '{{ config_dir }}/haproxy.cfg'
-  - name: File - NGINX Medias Config File
-    template:
-      src: config/nginx.medias.default.conf
-      dest: '{{ config_dir }}/nginx.medias.default.conf'
-  - name: File - Set Replication pg_hba.conf Script
-    template:
-      src: docker-entrypoint-initdb.d/replication_pg_hba.sh
-      dest: '{{ config_dir }}/docker-entrypoint-initdb.d-replication_pg_hba.sh'
-    when: db_mode == "primary"
-  - name: File - Init Standby Script
-    template:
-      src: scripts/init_{{ item }}.sh
-      dest: '{{ scripts_dir }}/init_{{ item }}.sh'
-    when: db_mode == item
-    with_items:
-    - primary
-    - standby
+  - name: Copy script files
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ scripts_dir }}/{{ item.path }}'
+    with_filetree: ../scripts/
+    when: item.state == 'file'
   - name: Create roll_db-data Volume on DB Nodes
     docker_volume:
       name: roll_db-data

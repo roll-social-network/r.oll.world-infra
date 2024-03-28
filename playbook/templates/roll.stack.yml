@@ -47,7 +47,7 @@ services:
     image: postgres:latest
     volumes:
     - db-data:/var/lib/postgresql/data
-    - {{ config_dir }}/docker-entrypoint-initdb.d-replication_pg_hba.sh:/docker-entrypoint-initdb.d/replication_pg_hba.sh:ro
+    - {{ scripts_dir }}/replication_pg_hba.sh:/docker-entrypoint-initdb.d/00_replication_pg_hba.sh:ro
     environment:
       POSTGRES_USER: roll
       POSTGRES_PASSWORD: roll
