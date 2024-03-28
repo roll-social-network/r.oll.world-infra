@@ -49,6 +49,16 @@
       dest: '{{ scripts_dir }}/{{ item.path }}'
     with_filetree: ../scripts/
     when: item.state == 'file'
+  - name: Create certs dir
+    file:
+      path: '{{ certs_dir }}'
+      state: directory
+  - name: Copy certs files
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ certs_dir }}/{{ item.path }}'
+    with_filetree: '{{ local_certs_dir }}'
+    when: item.state == 'file'
   - name: Create roll_db-data Volume on DB Nodes
     docker_volume:
       name: roll_db-data

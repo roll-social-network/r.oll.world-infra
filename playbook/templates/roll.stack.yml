@@ -3,8 +3,10 @@ services:
     image: haproxy:latest
     ports:
     - 80:80
+    - 443:443
     volumes:
     - {{ config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    - {{ certs_dir }}:/usr/local/etc/haproxy/certs:ro
     deploy:
       mode: global
   app:
@@ -21,9 +23,9 @@ services:
       DATABASES_DEFAULT: postgres://roll:roll@db/roll
       SESSION_COOKIE_DOMAIN: .{{ roll_subdomain_base }}
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}
-      CORS_ALLOWED_ORIGIN_REGEXES: "^http://\\w+\\.{{ roll_subdomain_base }}$$,^http://{{ roll_subdomain_base }}$$"
-      STATIC_URL: http://statics.{{ roll_subdomain_base }}/
-      MEDIA_URL: http://mds1.{{ roll_subdomain_base }}/
+      CORS_ALLOWED_ORIGIN_REGEXES: "^https://\\w+\\.{{ roll_subdomain_base }}$$,^https://{{ roll_subdomain_base }}$$"
+      STATIC_URL: https://statics.{{ roll_subdomain_base }}/
+      MEDIA_URL: https://mds1.{{ roll_subdomain_base }}/
       CSP_CONNECT_SRC: "'self',{{ roll_subdomain_base }},*.{{ roll_subdomain_base }}"
       CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',statics.{{ roll_subdomain_base }},fonts.googleapis.com"
       CSP_FONT_SRC: "'self',statics.{{ roll_subdomain_base }},fonts.gstatic.com"

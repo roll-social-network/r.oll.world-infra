@@ -11,6 +11,8 @@ deploy = "ansible-playbook -i inventories/inventory.yml -e @variables.yml playbo
 [packages]
 ansible = "*"
 requests = "*"
+certbot = "*"
+certbot-dns-cloudflare = "*"
 
 [dev-packages]
 
