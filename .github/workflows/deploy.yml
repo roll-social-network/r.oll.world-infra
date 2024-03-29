@@ -29,12 +29,13 @@ jobs:
       run: |
         printf "\n" >> .ansible_ssh_key
         chmod 600 .ansible_ssh_key
+    - name: Create certs dir
+      run: mkdir certs
     - name: Create SSL PEM
-      env:
-        SSL_PEM: ${{secrets.SSL_PEM}}
-      run: |
-        mkdir certs
-        echo ${SSL_PEM} > certs/ssl.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: certs/ssl.pem
+        contents: ${{secrets.SSL_PEM}}
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
