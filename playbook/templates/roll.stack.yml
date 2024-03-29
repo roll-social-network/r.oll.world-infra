@@ -24,6 +24,7 @@ services:
     environment:
       DEBUG: 1
       # SITE_ID: 1
+      SECRET_KEY: '{{ secret_key }}'
       DATABASES_DEFAULT: postgres://roll:roll@db/roll
       SESSION_COOKIE_DOMAIN: .{{ roll_subdomain_base }}
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}

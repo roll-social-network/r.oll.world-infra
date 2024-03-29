@@ -42,6 +42,7 @@ jobs:
       uses: docker/setup-buildx-action@v3
     - name: Run Deploy
       env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
         DOCKER_APP_IMAGE_TAG: ${{ github.sha }}
         DOCKER_STATICS_IMAGE_TAG: ${{ github.sha }}
         DOCKER_REGISTRY_USERNAME: ${{vars.DOCKER_REGISTRY_USERNAME}}
