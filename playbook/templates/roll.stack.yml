@@ -22,8 +22,8 @@ services:
       - mds1-ftp
       - channel-layer-redis
     environment:
-      # DEBUG: 1
-      # SITE_ID: 1
+      DEBUG: 1
+      SITE_ID: 1
       DATABASES_DEFAULT: postgres://roll:roll@db/roll
       SESSION_COOKIE_DOMAIN: .{{ roll_subdomain_base }}
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}
@@ -47,6 +47,8 @@ services:
             ["channel-layer-redis", 6379]
           ]
         }
+      PHONE_AUTH_SMS_GATEWAY: twilio
+      PHONE_AUTH_SMS_GATEWAY_ARGS: {{ twilio_args }}
     deploy:
       replicas: 2
   db:

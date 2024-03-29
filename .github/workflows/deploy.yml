@@ -52,4 +52,5 @@ jobs:
         CONFIG_DIR: /roll/config
         SCRIPTS_DIR: /roll/scripts
         CERTS_DIR: /roll/certs
+        TWILIO_ARGS: ${{vars.TWILIO_API_KEY}} ${{secrets.TWILIO_API_SECRET}} ${{vars.TWILIO_ACCOUNT_SID}} ${{vars.TWILIO_MESSAGING_SERVICE_SID}}
       run: pipenv run deploy --key-file .ansible_ssh_key
