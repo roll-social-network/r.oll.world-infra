@@ -23,7 +23,7 @@ services:
       - channel-layer-redis
     environment:
       DEBUG: 1
-      SITE_ID: 1
+      # SITE_ID: 1
       DATABASES_DEFAULT: postgres://roll:roll@db/roll
       SESSION_COOKIE_DOMAIN: .{{ roll_subdomain_base }}
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}
