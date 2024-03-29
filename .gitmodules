@@ -1,3 +1,3 @@
 [submodule "app"]
 	path = app
-	url = git@github.com:dougppaz/roll-social-network.git
+	url = https://github.com/dougppaz/roll-social-network.git
