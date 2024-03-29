@@ -4,6 +4,10 @@ services:
     ports:
     - 80:80
     - 443:443
+    depends_on:
+    - app
+    - statics
+    - mds1
     volumes:
     - {{ config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     - {{ certs_dir }}:/usr/local/etc/haproxy/certs:ro
