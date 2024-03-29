@@ -27,7 +27,7 @@ jobs:
         contents: ${{secrets.SSH_PRIVATE_KEY}}
     - name: .ansible_ssh_key EOF and chmod
       run: |
-        printf "\n" > .ansible_ssh_key
+        printf "\n" >> .ansible_ssh_key
         chmod 600 .ansible_ssh_key
     - name: Create SSL PEM
       env:
