@@ -1,0 +1,51 @@
+name: Play Deploy
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.12.1
+        cache: pipenv
+    - name: Install pipenv
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+    - name: Create .ansible_ssh_key
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: .ansible_ssh_key
+        contents: ${{secrets.SSH_PRIVATE_KEY}}
+    - name: .ansible_ssh_key EOF and chmod
+      run: |
+        printf "\n" > .ansible_ssh_key
+        chmod 600 .ansible_ssh_key
+    - name: Create SSL PEM
+      env:
+        SSL_PEM: ${{secrets.SSL_PEM}}
+      run: |
+        mkdir certs
+        echo ${SSL_PEM} > certs/ssl.pem
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Run Deploy
+      env:
+        DOCKER_APP_IMAGE_TAG: ${{ github.sha }}
+        DOCKER_STATICS_IMAGE_TAG: ${{ github.sha }}
+        DOCKER_REGISTRY_USERNAME: ${{vars.DOCKER_REGISTRY_USERNAME}}
+        DOCKER_REGISTRY_PASSWORD: ${{secrets.DOCKER_REGISTRY_PASSWORD}}
+        LOCAL_CERTS_DIR: ${{github.workspace}}/certs
+        ROLL_SUBDOMAIN_BASE: ${{vars.ROLL_SUBDOMAIN_BASE}}
+        ANSIBLE_HOST_KEY_CHECKING: 0
+      run: pipenv run deploy --key-file .ansible_ssh_key

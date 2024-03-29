@@ -7,6 +7,6 @@ local_certs_dir: '{{ lookup("env", "LOCAL_CERTS_DIR") }}'
 docker_login_username: '{{ lookup("env", "DOCKER_REGISTRY_USERNAME") }}'
 docker_login_password: '{{ lookup("env", "DOCKER_REGISTRY_PASSWORD") }}'
 docker_app_image_name: dougppaz/r.oll.world-app
-docker_app_image_tag: '{{ lookup("env", "DOCKER_APP_IMAGE_TAG") | lookup("env", "GITHUB_SHA") }}'
+docker_app_image_tag: '{{ lookup("env", "DOCKER_APP_IMAGE_TAG") }}'
 docker_statics_image_name: dougppaz/r.oll.world-statics
-docker_statics_image_tag: '{{ lookup("env", "DOCKER_STATICS_IMAGE_TAG") | lookup("env", "GITHUB_SHA") }}'
+docker_statics_image_tag: '{{ lookup("env", "DOCKER_STATICS_IMAGE_TAG") }}'
