@@ -49,6 +49,7 @@ services:
         }
       PHONE_AUTH_SMS_GATEWAY: twilio
       PHONE_AUTH_SMS_GATEWAY_ARGS: {{ twilio_args }}
+      OVERRIDE_SCHEME: https
     deploy:
       replicas: 2
   db:
