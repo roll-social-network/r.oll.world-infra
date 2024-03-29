@@ -1,8 +1,8 @@
 ---
 roll_subdomain_base: '{{ lookup("env", "ROLL_SUBDOMAIN_BASE") }}'
-config_dir: '{{ lookup("env", "CONFIG_DIR") | default("/roll/config") }}'
-scripts_dir: '{{ lookup("env", "SCRIPTS_DIR") | default("/roll/scripts") }}'
-certs_dir: '{{ lookup("env", "CERTS_DIR") | default("/roll/certs") }}'
+config_dir: '{{ lookup("env", "CONFIG_DIR") }}'
+scripts_dir: '{{ lookup("env", "SCRIPTS_DIR") }}'
+certs_dir: '{{ lookup("env", "CERTS_DIR") }}'
 local_certs_dir: '{{ lookup("env", "LOCAL_CERTS_DIR") }}'
 docker_login_username: '{{ lookup("env", "DOCKER_REGISTRY_USERNAME") }}'
 docker_login_password: '{{ lookup("env", "DOCKER_REGISTRY_PASSWORD") }}'

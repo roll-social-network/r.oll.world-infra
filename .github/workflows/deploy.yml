@@ -48,4 +48,7 @@ jobs:
         LOCAL_CERTS_DIR: ${{github.workspace}}/certs
         ROLL_SUBDOMAIN_BASE: ${{vars.ROLL_SUBDOMAIN_BASE}}
         ANSIBLE_HOST_KEY_CHECKING: 0
+        CONFIG_DIR: /roll/config
+        SCRIPTS_DIR: /roll/scripts
+        CERTS_DIR: /roll/certs
       run: pipenv run deploy --key-file .ansible_ssh_key
