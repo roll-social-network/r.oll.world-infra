@@ -101,7 +101,7 @@
       - sh
       command:
       - '/init_{{ item }}.sh'
-    when: db_mode == item and current_db_mode.stdout != item
+    when: db_mode is defined and db_mode == item and current_db_mode.stdout != item
     with_items:
     - primary
     - standby
@@ -109,7 +109,7 @@
     copy:
       dest: '{{ config_dir }}/db_mode'
       content: '{{ item }}'
-    when: db_mode == item and current_db_mode.stdout != item
+    when: db_mode is defined and db_mode == item and current_db_mode.stdout != item
     with_items:
     - primary
     - standby
