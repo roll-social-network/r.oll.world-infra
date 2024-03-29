@@ -4,6 +4,7 @@ servers:
       ansible_ssh_user: ubuntu
       advertise_addr: 51.79.84.91
       docker_swarm_manager_host: true
+      db_mode: primary
     vps-9d706477.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.240.162
