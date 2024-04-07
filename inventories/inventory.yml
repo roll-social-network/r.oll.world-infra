@@ -9,6 +9,7 @@ servers:
     vps-9d706477.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.240.162
+      db_mode: standby
     vps-acf71116.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.243.18
