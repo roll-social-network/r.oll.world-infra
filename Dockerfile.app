@@ -10,9 +10,9 @@ FROM node:20.11-alpine AS build-frontend
 
 WORKDIR /home/app
 
-COPY frontend/package*.json .
+COPY frontend/package*.json ./
 RUN npm install
-COPY frontend .
+COPY frontend ./
 RUN npm run build
 
 FROM python:3.12-alpine
