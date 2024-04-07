@@ -22,7 +22,7 @@ services:
       - mds1-ftp
       - channel-layer-redis
     environment:
-      # DEBUG: 1
+      DEBUG: 1
       # SITE_ID: 1
       SECRET_KEY: '{{ secret_key }}'
       DATABASES_DEFAULT: postgres://roll:roll@db/roll
