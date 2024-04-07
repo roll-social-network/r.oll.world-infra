@@ -10,7 +10,8 @@
     docker_image:
       build:
         path: ../app
-        dockerfile: ../Dockerfile.app
+        dockerfile: ../Dockerfile
+        target: app
       name: '{{ docker_app_image_name }}'
       tag: '{{ docker_app_image_tag }}'
       push: true
@@ -19,7 +20,8 @@
     docker_image:
       build:
         path: ../app
-        dockerfile: ../Dockerfile.statics
+        dockerfile: ../Dockerfile
+        target: statics
       name: '{{ docker_statics_image_name }}'
       tag: '{{ docker_statics_image_tag }}'
       push: true
