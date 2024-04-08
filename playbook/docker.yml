@@ -32,8 +32,21 @@
       name: docker-ce
       state: latest
       update_cache: true
+  - name: Configure daemon.json
+    copy:
+      dest: /etc/docker/daemon.json
+      content: |
+        {
+          "metrics-addr" : "0.0.0.0:9323"
+        }
+    register: daemon_config
   - name: Install Docker Module for Python
     pip:
       name:
         - docker
         - jsondiff
+  - name: Restart Docker service
+    service:
+      name: docker
+      state: restarted
+    when: daemon_config.changed
