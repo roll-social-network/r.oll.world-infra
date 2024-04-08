@@ -39,7 +39,7 @@ jobs:
       uses: dawidd6/action-ansible-playbook@v2
       env:
         DOCKER_CERTS_DIR: /roll/docker/certs
-        LOCAL_DOCKER_CERTS_DIR: docker-certs
+        LOCAL_DOCKER_CERTS_DIR: ${{github.workspace}}/docker-certs
       with:
         playbook: playbook/docker.yml
         key: ${{secrets.SSH_PRIVATE_KEY}}
