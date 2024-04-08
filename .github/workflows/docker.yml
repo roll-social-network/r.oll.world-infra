@@ -8,8 +8,38 @@ jobs:
     environment: prod
     steps:
     - uses: actions/checkout@v4
+    - name: Create docker certs dir
+      run: mkdir docker-certs
+    - name: Create ca.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/ca.pem
+        contents: ${{secrets.DOCKER_CERT_CA_PEM}}
+    - name: Create vps-16507529.servers.r.oll.world.server-cert.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/vps-16507529.servers.r.oll.world.server-cert.pem
+        contents: ${{secrets.DOCKER_CERT_VPS_16507529_SERVER_CERT_PEM}}
+    - name: Create server-key.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/server-key.pem
+        contents: ${{secrets.DOCKER_CERT_SERVER_KEY_PEM}}
+    - name: Create cert.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/cert.pem
+        contents: ${{secrets.DOCKER_CERT_PEM}}
+    - name: Create key.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/key.pem
+        contents: ${{secrets.DOCKER_CERT_KEY_PEM}}
     - name: Run Docker
       uses: dawidd6/action-ansible-playbook@v2
+      env:
+        DOCKER_CERTS_DIR: /roll/docker/certs
+        LOCAL_DOCKER_CERTS_DIR: docker-certs
       with:
         playbook: playbook/docker.yml
         key: ${{secrets.SSH_PRIVATE_KEY}}

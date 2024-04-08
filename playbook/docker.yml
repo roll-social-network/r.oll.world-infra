@@ -32,6 +32,70 @@
       name: docker-ce
       state: latest
       update_cache: true
+  - name: Create Docker certs dir
+    file:
+      path: '{{ docker_certs_dir }}'
+      state: directory
+  - name: Copy Manager Docker certs
+    copy:
+      src: '{{ local_docker_certs_dir }}/{{ item }}'
+      dest: '{{ docker_certs_dir }}/{{ item }}'
+    with_items:
+    - ca.pem
+    - '{{ inventory_hostname }}.server-cert.pem'
+    - server-key.pem
+    when: docker_swarm_manager_host is defined
+  - name: Copy Docker certs
+    copy:
+      src: '{{ local_docker_certs_dir }}/{{ item }}'
+      dest: '{{ docker_certs_dir }}/{{ item }}'
+    with_items:
+    - ca.pem
+    - cert.pem
+    - key.pem
+    when: docker_swarm_manager_host is not defined
+  - name: Get docker.service stat
+    stat:
+      path: /etc/systemd/system/docker.service
+    register: docker_service_file
+  - name: Copy Manager Docker service
+    copy:
+      src: /lib/systemd/system/docker.service
+      dest: /etc/systemd/system/docker.service
+      remote_src: true
+    when: docker_swarm_manager_host is defined and not docker_service_file.stat.exists
+    register: manager_docker_service_file
+  - name: Remove Manager Docker service host arg
+    replace:
+      path: /etc/systemd/system/docker.service
+      after: ExecStart=/usr/bin/dockerd
+      before: --containerd=/run/containerd/containerd.sock
+      regexp: '^\ -H\ fd:\/\/\ $'
+      replace: ' '
+    when: manager_docker_service_file.changed and docker_swarm_manager_host is defined
+  - name: Update and Restart Manager Docker service
+    systemd_service:
+      state: restarted
+      daemon_reload: true
+      name: docker
+    when: manager_docker_service_file.changed
+  - name: Configure Manager daemon.json
+    copy:
+      dest: /etc/docker/daemon.json
+      content: |
+        {
+          "hosts": [
+            "fd://",
+            "tcp://0.0.0.0:2375"
+          ],
+          "tlsverify": true,
+          "tlscacert": "{{ docker_certs_dir }}/ca.pem",
+          "tlscert": "{{ docker_certs_dir }}/{{ inventory_hostname }}.server-cert.pem",
+          "tlskey": "{{ docker_certs_dir }}/server-key.pem",
+          "metrics-addr" : "0.0.0.0:9323"
+        }
+    when: docker_swarm_manager_host is defined
+    register: manager_daemon_config
   - name: Configure daemon.json
     copy:
       dest: /etc/docker/daemon.json
@@ -39,7 +103,8 @@
         {
           "metrics-addr" : "0.0.0.0:9323"
         }
-    register: daemon_config
+    when: docker_swarm_manager_host is not defined
+    register: worker_daemon_config
   - name: Install Docker Module for Python
     pip:
       name:
@@ -49,4 +114,4 @@
     service:
       name: docker
       state: restarted
-    when: daemon_config.changed
+    when: manager_daemon_config.changed or worker_daemon_config.changed
