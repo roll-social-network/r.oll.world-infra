@@ -21,6 +21,7 @@ WORKDIR /home/app
 EXPOSE 8000
 ENV DEBUG 0
 ENV STATIC_ROOT /home/app/statics/
+ENV NEW_RELIC_CONFIG_FILE /home/app/newrelic.ini
 
 COPY --from=build-requirements /home/app/requirements.txt .
 RUN apk add --no-cache postgresql-libs && \
@@ -28,7 +29,8 @@ RUN apk add --no-cache postgresql-libs && \
         pip install psycopg2-binary \
                     psycopg2 \
                     django-storages \
-                    channels-redis --no-cache-dir && \
+                    channels-redis \
+                    newrelic --no-cache-dir && \
         pip install -r requirements.txt --no-cache-dir && \
         apk --purge del .build-deps
 COPY --from=build-frontend /home/app/dist frontend/dist
@@ -36,8 +38,8 @@ COPY manage.py ./
 COPY rollsocialnetwork rollsocialnetwork
 RUN python manage.py collectstatic --noinput
 
-ENTRYPOINT [ "daphne" ]
-CMD [ "-b", "0.0.0.0", "rollsocialnetwork.asgi:application" ]
+ENTRYPOINT [ "newrelic-admin" ]
+CMD [ "run-program", "daphne", "-b", "0.0.0.0", "rollsocialnetwork.asgi:application" ]
 
 FROM nginx:latest as statics
 

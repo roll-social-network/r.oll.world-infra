@@ -12,3 +12,4 @@ docker_app_image_tag: '{{ lookup("env", "DOCKER_APP_IMAGE_TAG") }}'
 docker_statics_image_name: dougppaz/r.oll.world-statics
 docker_statics_image_tag: '{{ lookup("env", "DOCKER_STATICS_IMAGE_TAG") }}'
 twilio_args: '{{ lookup("env", "TWILIO_ARGS") }}'
+newrelic_license_key: '{{ lookup("env", "NEWRELIC_LICENSE_KEY") }}'

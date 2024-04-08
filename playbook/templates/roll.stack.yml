@@ -21,6 +21,8 @@ services:
       - db
       - mds1-ftp
       - channel-layer-redis
+    volumes:
+    - {{ config_dir }}/newrelic.ini:/home/app/newrelic.ini:ro
     environment:
       # DEBUG: 1
       # SITE_ID: 1
@@ -30,7 +32,6 @@ services:
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}
       CORS_ALLOWED_ORIGIN_REGEXES: "^https://\\w+\\.{{ roll_subdomain_base }}$$,^https://{{ roll_subdomain_base }}$$"
       STATIC_URL: https://statics.{{ roll_subdomain_base }}/
-      STATIC_ROOT: ./statics/
       MEDIA_URL: https://mds1.{{ roll_subdomain_base }}/
       CSP_CONNECT_SRC: "'self',{{ roll_subdomain_base }},*.{{ roll_subdomain_base }}"
       CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',statics.{{ roll_subdomain_base }},fonts.googleapis.com"
