@@ -7,6 +7,7 @@ name = "pypi"
 docker = "ansible-playbook -i inventories/inventory.yml -e @variables.yml playbook/docker.yml"
 docker-swarm = "ansible-playbook -i inventories/inventory.yml -e @variables.yml playbook/docker-swarm.yml"
 deploy = "ansible-playbook -i inventories/inventory.yml -e @variables.yml playbook/deploy.yml"
+monitoring = "ansible-playbook -i inventories/inventory.yml -e @variables.yml playbook/monitoring.yml"
 
 [packages]
 ansible = "*"

@@ -1,0 +1,17 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+    - 9090:9090
+    volumes:
+    - prometheus-data:/prometheus
+    - {{ config_dir }}/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    - {{ docker_certs_dir }}:/docker-certs:ro
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+        - node.labels.monitoring_prometheus == true
+
+volumes:
+  prometheus-data: {}

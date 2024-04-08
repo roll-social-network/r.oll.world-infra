@@ -13,3 +13,4 @@ servers:
     vps-acf71116.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.243.18
+      monitoring_prometheus: 'true'

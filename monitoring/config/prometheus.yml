@@ -1,0 +1,18 @@
+scrape_configs:
+- job_name: 'prometheus'
+  static_configs:
+  - targets: ['prometheus:9090']
+- job_name: 'dockerswarm_nodes'
+  dockerswarm_sd_configs:
+  - role: nodes
+    host: https://{{ roll_subdomain_base }}:2375
+    tls_config:
+      ca_file: /docker-certs/ca.pem
+      cert_file: /docker-certs/cert.pem
+      key_file: /docker-certs/key.pem
+  relabel_configs:
+  - source_labels: [__meta_dockerswarm_node_address]
+    target_label: __address__
+    replacement: $1:9323
+  - source_labels: [__meta_dockerswarm_node_hostname]
+    target_label: instance
