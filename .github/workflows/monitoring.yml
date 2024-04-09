@@ -29,6 +29,8 @@ jobs:
       uses: dawidd6/action-ansible-playbook@v2
       env:
         LOCAL_DOCKER_CERTS_DIR: ${{github.workspace}}/docker-certs
+        DOCKER_CERTS_DIR: ${{vars.DOCKER_CERTS_DIR}}
+        CONFIG_DIR: ${{vars.CONFIG_DIR}}
       with:
         playbook: playbook/monitoring.yml
         key: ${{secrets.SSH_PRIVATE_KEY}}
