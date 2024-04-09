@@ -42,9 +42,9 @@
     with_items:
     - newrelic.ini
     - nginx.medias.default.conf
-  - name: Create scripts dir
+  - name: Create DB scripts dir
     file:
-      path: '{{ scripts_dir }}'
+      path: '{{ scripts_dir }}/db'
       state: directory
   - name: Copy DB script files
     copy:
