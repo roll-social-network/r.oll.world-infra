@@ -1,0 +1,19 @@
+services:
+  haproxy:
+    image: haproxy:latest
+    ports:
+    - 80:80
+    - 443:443
+    networks:
+    - default
+    - lb
+    volumes:
+    - {{ config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    - {{ certs_dir }}:/usr/local/etc/haproxy/certs:ro
+    deploy:
+      mode: global
+
+networks:
+  lb:
+    name: lb
+    external: true

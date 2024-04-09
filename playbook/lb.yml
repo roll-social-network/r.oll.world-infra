@@ -1,0 +1,67 @@
+---
+- name: Create Config and Certs files
+  hosts: servers
+  become: true
+  tasks:
+  - name: Create config dir
+    file:
+      path: '{{ config_dir }}'
+      state: directory
+  - name: Render config files
+    template:
+      src: 'config/{{ item }}'
+      dest: '{{ config_dir }}/{{ item }}'
+    with_items:
+    - haproxy.cfg
+  - name: Create certs dir
+    file:
+      path: '{{ certs_dir }}'
+      state: directory
+  - name: Copy certs files
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ certs_dir }}/{{ item.path }}'
+    with_filetree: '{{ local_certs_dir }}'
+    when: item.state == 'file'
+
+- name: Setup network
+  hosts: servers
+  become: true
+  tasks:
+  - name: Create lb network
+    docker_network:
+      name: lb
+      attachable: true
+      driver: overlay
+    when: docker_swarm_manager_host is defined
+    run_once: true
+
+- name: Deploy stack
+  hosts: servers
+  become: true
+  tasks:
+  - name: Select Stack Deploy Host
+    set_fact:
+      stack_deploy_host: true
+    run_once: true
+    delegate_to: '{{ inventory_hostname }}'
+    delegate_facts: true
+  - name: Create lb.yml temporary file
+    tempfile: {}
+    register: lb_file
+    when: stack_deploy_host is defined
+    run_once: true
+  - name: Create lb.yml
+    template:
+      src: lb.stack.yml
+      dest: '{{ lb_file.path }}'
+    when: stack_deploy_host is defined
+    run_once: true
+  - name: Deploy stack
+    docker_stack:
+      state: present
+      name: lb
+      compose:
+        - '{{ lb_file.path }}'
+    when: stack_deploy_host is defined
+    run_once: true
