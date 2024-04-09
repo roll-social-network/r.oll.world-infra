@@ -16,3 +16,32 @@ scrape_configs:
     replacement: $1:9323
   - source_labels: [__meta_dockerswarm_node_hostname]
     target_label: instance
+- job_name: 'dockerswarm_exports'
+  dockerswarm_sd_configs:
+  - role: tasks
+    host: https://{{ roll_subdomain_base }}:2375
+    tls_config:
+      ca_file: /docker-certs/ca.pem
+      cert_file: /docker-certs/cert.pem
+      key_file: /docker-certs/key.pem
+  relabel_configs:
+  - source_labels: [__meta_dockerswarm_task_desired_state]
+    regex: running
+    action: keep
+  - source_labels: [__meta_dockerswarm_service_label_metrics_job]
+    regex: .+
+    action: keep
+  - source_labels: [__meta_dockerswarm_service_label_metrics_job]
+    target_label: job
+  - action: replace
+    regex: (.+)
+    source_labels:
+    - __meta_dockerswarm_service_label_metrics_path
+    target_label: __metrics_path__
+  - action: replace
+    regex: ([^:]+)(?::\d+)?;(\d+)
+    replacement: $1:$2
+    source_labels:
+    - __address__
+    - __meta_dockerswarm_service_label_metrics_port
+    target_label: __address__

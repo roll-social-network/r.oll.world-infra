@@ -12,6 +12,19 @@ services:
       placement:
         constraints:
         - node.labels.monitoring_prometheus == true
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    volumes:
+    - /:/host:ro,rslave
+    deploy:
+      mode: global
+      labels:
+        metrics_job: node-exporter
+        metrics_port: 9100
 
 volumes:
   prometheus-data: {}
