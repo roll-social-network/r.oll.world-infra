@@ -8,8 +8,27 @@ jobs:
     environment: prod
     steps:
     - uses: actions/checkout@v4
+    - name: Create docker-certs dir
+      run: mkdir docker-certs
+    - name: Create ca.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/ca.pem
+        contents: ${{secrets.DOCKER_CERT_CA_PEM}}
+    - name: Create cert.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/cert.pem
+        contents: ${{secrets.DOCKER_CERT_PEM}}
+    - name: Create key.pem
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: docker-certs/key.pem
+        contents: ${{secrets.DOCKER_CERT_KEY_PEM}}
     - name: Run Monitoring
       uses: dawidd6/action-ansible-playbook@v2
+      env:
+        LOCAL_DOCKER_CERTS_DIR: ${{github.workspace}}/docker-certs
       with:
         playbook: playbook/monitoring.yml
         key: ${{secrets.SSH_PRIVATE_KEY}}
