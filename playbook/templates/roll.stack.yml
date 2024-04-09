@@ -1,18 +1,4 @@
 services:
-  proxy:
-    image: haproxy:latest
-    ports:
-    - 80:80
-    - 443:443
-    depends_on:
-    - app
-    - statics
-    - mds1
-    volumes:
-    - {{ config_dir }}/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-    - {{ certs_dir }}:/usr/local/etc/haproxy/certs:ro
-    deploy:
-      mode: global
   app:
     image: {{ docker_app_image_name }}:{{ docker_app_image_tag }}
     ports:
@@ -23,6 +9,9 @@ services:
       - channel-layer-redis
     volumes:
     - {{ config_dir }}/newrelic.ini:/home/app/newrelic.ini:ro
+    networks:
+    - default
+    - lb
     environment:
       # DEBUG: 1
       # SITE_ID: 1
@@ -59,7 +48,7 @@ services:
     image: postgres:latest
     volumes:
     - db-data:/var/lib/postgresql/data
-    - {{ scripts_dir }}/replication_pg_hba.sh:/docker-entrypoint-initdb.d/00_replication_pg_hba.sh:ro
+    - {{ scripts_dir }}/db/replication_pg_hba.sh:/docker-entrypoint-initdb.d/00_replication_pg_hba.sh:ro
     environment:
       POSTGRES_USER: roll
       POSTGRES_PASSWORD: roll
@@ -95,6 +84,9 @@ services:
         - node.labels.db_mode == standby
   statics:
     image: {{ docker_statics_image_name }}:{{ docker_statics_image_tag }}
+    networks:
+    - default
+    - lb
     deploy:
       mode: global
   mds1-ftp:
@@ -115,6 +107,9 @@ services:
       - {{ config_dir }}/nginx.medias.default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - app
+    networks:
+    - default
+    - lb
     deploy:
       replicas: 2
       placement:
@@ -128,6 +123,9 @@ volumes:
   mds1-data: {}
 
 networks:
+  lb:
+    name: lb
+    external: true
   db:
     name: roll_db
     external: true

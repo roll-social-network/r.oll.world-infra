@@ -35,31 +35,22 @@
     file:
       path: '{{ config_dir }}'
       state: directory
-  - name: Render template files
+  - name: Render config files
     template:
-      src: '{{ item.src }}'
-      dest: '{{ config_dir }}/{{ item.path }}'
-    with_filetree: ../config/
-    when: item.state == 'file'
+      src: 'config/{{ item }}'
+      dest: '{{ config_dir }}/{{ item }}'
+    with_items:
+    - newrelic.ini
+    - nginx.medias.default.conf
   - name: Create scripts dir
     file:
       path: '{{ scripts_dir }}'
       state: directory
-  - name: Copy script files
+  - name: Copy DB script files
     copy:
       src: '{{ item.src }}'
-      dest: '{{ scripts_dir }}/{{ item.path }}'
-    with_filetree: ../scripts/
-    when: item.state == 'file'
-  - name: Create certs dir
-    file:
-      path: '{{ certs_dir }}'
-      state: directory
-  - name: Copy certs files
-    copy:
-      src: '{{ item.src }}'
-      dest: '{{ certs_dir }}/{{ item.path }}'
-    with_filetree: '{{ local_certs_dir }}'
+      dest: '{{ scripts_dir }}/db/{{ item.path }}'
+    with_filetree: scripts/db
     when: item.state == 'file'
 
 - name: Setup DB
@@ -92,7 +83,7 @@
       mounts:
       - source: roll_db-data
         target: /var/lib/postgresql/data
-      - source: '{{ scripts_dir }}/init_{{ item }}.sh'
+      - source: '{{ scripts_dir }}/db/init_{{ item }}.sh'
         target: '/init_{{ item }}.sh'
         type: bind
       env:
