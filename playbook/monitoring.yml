@@ -8,12 +8,13 @@
       path: '{{ config_dir }}/monitoring'
       state: directory
     when: monitoring_prometheus is defined
-  - name: Render template files
+  - name: Render prometheus config files
     template:
-      src: '{{ item.src }}'
-      dest: '{{ config_dir }}/monitoring/{{ item.path }}'
-    with_filetree: ../monitoring/config/
-    when: monitoring_prometheus is defined and item.state == 'file'
+      src: 'config/monitoring/{{ item }}'
+      dest: '{{ config_dir }}/monitoring/{{ item }}'
+    with_items:
+    - prometheus.yml
+    when: monitoring_prometheus is defined
 
 - name: Setup Prometheus
   hosts: servers
