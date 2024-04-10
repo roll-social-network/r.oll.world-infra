@@ -31,6 +31,7 @@ jobs:
         LOCAL_DOCKER_CERTS_DIR: ${{github.workspace}}/docker-certs
         DOCKER_CERTS_DIR: ${{vars.DOCKER_CERTS_DIR}}
         CONFIG_DIR: ${{vars.CONFIG_DIR}}
+        ROLL_SUBDOMAIN_BASE: ${{vars.ROLL_SUBDOMAIN_BASE}}
       with:
         playbook: playbook/monitoring.yml
         key: ${{secrets.SSH_PRIVATE_KEY}}
