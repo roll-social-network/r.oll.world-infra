@@ -26,9 +26,22 @@ services:
       labels:
         metrics_job: node-exporter
         metrics_port: 9100
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+    - grafana-data:/var/lib/grafana
+    networks:
+    - default
+    - lb
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+        - node.labels.monitoring_grafana == true
 
 volumes:
   prometheus-data: {}
+  grafana-data: {}
 
 networks:
   lb:

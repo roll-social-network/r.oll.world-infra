@@ -14,3 +14,4 @@ servers:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.243.18
       monitoring_prometheus: 'true'
+      monitoring_grafana: 'true'

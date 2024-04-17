@@ -16,15 +16,16 @@
     - prometheus.yml
     when: monitoring_prometheus is defined
 
-- name: Setup Prometheus
+- name: Setup Monitoring Docker Node Labels
   hosts: servers
   become: true
   tasks:
-  - name: Set monitoring_prometheus node label
+  - name: Set monitoring_prometheus and monitoring_grafana node label
     docker_node:
       hostname: '{{ hostvars.get(item).ansible_hostname }}'
       labels:
         monitoring_prometheus: '{{ hostvars.get(item).get("monitoring_prometheus", "false") }}'
+        monitoring_grafana: '{{ hostvars.get(item).get("monitoring_grafana", "false") }}'
     run_once: true
     when: docker_swarm_manager_host is defined
     with_items: '{{ play_hosts }}'
