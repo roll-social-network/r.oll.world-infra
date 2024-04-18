@@ -22,6 +22,9 @@ scrape_configs:
     host: https://{{ roll_subdomain_base }}:2375
     tls_config: *tls-config
   relabel_configs:
+  - source_labels: [__meta_dockerswarm_network_name]
+    regex: monitoring
+    action: keep
   - source_labels: [__meta_dockerswarm_task_desired_state]
     regex: running
     action: keep
