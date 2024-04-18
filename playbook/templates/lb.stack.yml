@@ -12,6 +12,9 @@ services:
     - {{ certs_dir }}:/usr/local/etc/haproxy/certs:ro
     deploy:
       mode: global
+      labels:
+        metrics_job: haproxy
+        metrics_port: 9090
 
 networks:
   lb:
