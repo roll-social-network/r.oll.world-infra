@@ -30,6 +30,18 @@
     when: docker_swarm_manager_host is defined
     with_items: '{{ play_hosts }}'
 
+- name: Setup network
+  hosts: servers
+  become: true
+  tasks:
+  - name: Create monitoring network
+    docker_network:
+      name: monitoring
+      attachable: true
+      driver: overlay
+    when: docker_swarm_manager_host is defined
+    run_once: true
+
 - name: Deploy stack
   hosts: servers
   become: true

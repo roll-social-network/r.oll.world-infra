@@ -8,6 +8,7 @@ services:
     networks:
     - default
     - lb
+    - monitoring
     deploy:
       replicas: 1
       placement:
@@ -23,6 +24,9 @@ services:
     pid: host
     volumes:
     - /:/host:ro,rslave
+    networks:
+    - default
+    - monitoring
     deploy:
       mode: global
       labels:
@@ -57,6 +61,9 @@ volumes:
   grafana-data: {}
 
 networks:
+  monitoring:
+    name: monitoring
+    external: true
   lb:
     name: lb
     external: true
