@@ -94,9 +94,9 @@
           "tlskey": "{{ docker_certs_dir }}/server-key.pem",
           "metrics-addr" : "0.0.0.0:9323",
           "experimental": true,
-          "ip6tables": true,
           "ipv6": true,
-          "fixed-cidr-v6": "{{ ipv6_subnet }}"
+          "fixed-cidr-v6": "{{ ipv6_gateway }}",
+          "ip6tables": true
         }
     when: docker_swarm_manager_host is defined
     register: manager_daemon_config
@@ -107,9 +107,9 @@
         {
           "metrics-addr" : "0.0.0.0:9323",
           "experimental": true,
-          "ip6tables": true,
           "ipv6": true,
-          "fixed-cidr-v6": "{{ ipv6_subnet }}"
+          "fixed-cidr-v6": "{{ ipv6_gateway }}",
+          "ip6tables": true
         }
     when: docker_swarm_manager_host is not defined
     register: worker_daemon_config
