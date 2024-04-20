@@ -48,15 +48,20 @@ services:
       GF_SMTP_FROM_NAME: roll monitoring grafana
       GF_AUTH_GENERIC_OAUTH_ENABLED: 'true'
       GF_AUTH_GENERIC_OAUTH_NAME: roll
-      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: swnVeT4hKR40iXH5k0oZxUCGOv4PGJ5KDRh736tM
-      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: k8Y361fT5cxJqj8eduAgZruhmMZQHNlDtfADdJ94HYlAuIcNS08fqm6CuuCvUxLFjN53hRUwTjPuv3LgECHXSIjFg6NHJjuKelLRA9ekLq4fPFopqY59ZeXvQtk8fuBS
-      GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://{{ roll_subdomain_base }}/oauth2/authorize
-      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://{{ roll_subdomain_base }}/oauth2/token
-      GF_AUTH_GENERIC_OAUTH_API_URL: https://{{ roll_subdomain_base }}/oauth2/userinfo
+      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: '{{ grafana_oauth2_client_id }}'
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: '{{ grafana_oauth2_client_secret }}'
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://{{ roll_subdomain_base }}/oauth2/authorize/
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://{{ roll_subdomain_base }}/oauth2/token/
+      GF_AUTH_GENERIC_OAUTH_API_URL: https://{{ roll_subdomain_base }}/oauth2/userinfo/
       GF_AUTH_GENERIC_OAUTH_USE_PKCE: 'true'
       GF_AUTH_GENERIC_OAUTH_SCOPES: openid
       GF_AUTH_GENERIC_OAUTH_EMAIL_ATTRIBUTE_PATH: grafana.email
       GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: grafana.role
+      GF_AUTH_BASIC_ENABLED: 'false'
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+      GF_AUTH_ANONYMOUS_ORG_NAME: 'roll'
+      GF_AUTH_ANONYMOUS_ORG_ROLE: 'Viewer'
+      GF_AUTH_DISABLE_LOGIN_FORM: 'true'
     deploy:
       replicas: 1
       placement:

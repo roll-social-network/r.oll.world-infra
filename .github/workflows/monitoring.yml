@@ -32,6 +32,8 @@ jobs:
         DOCKER_CERTS_DIR: ${{vars.DOCKER_CERTS_DIR}}
         CONFIG_DIR: ${{vars.CONFIG_DIR}}
         ROLL_SUBDOMAIN_BASE: ${{vars.ROLL_SUBDOMAIN_BASE}}
+        GRAFANA_OAUTH2_CLIENT_ID: ${{vars.GRAFANA_OAUTH2_CLIENT_ID}}
+        GRAFANA_OAUTH2_CLIENT_SECRET: ${{secrets.GRAFANA_OAUTH2_CLIENT_SECRET}}
       with:
         playbook: playbook/monitoring.yml
         key: ${{secrets.SSH_PRIVATE_KEY}}
