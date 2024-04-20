@@ -6,12 +6,15 @@ servers:
       docker_swarm_manager_host: true
       db_mode: primary
       roll_storage: mds1
+      ipv6_subnet: 2607:5300:0205:0200:0000:0000:0000:0000/64
     vps-9d706477.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.240.162
       db_mode: standby
+      ipv6_subnet: 2607:5300:0201:3100:0000:0000:0000:0000/64
     vps-acf71116.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.243.18
       monitoring_prometheus: 'true'
       monitoring_grafana: 'true'
+      ipv6_subnet: 2607:5300:0201:3100:0000:0000:0000:0000/64
