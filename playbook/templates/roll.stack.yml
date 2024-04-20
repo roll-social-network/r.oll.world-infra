@@ -1,8 +1,6 @@
 services:
   app:
     image: {{ docker_app_image_name }}:{{ docker_app_image_tag }}
-    ports:
-    - 8000:8000
     depends_on:
       - db
       - mds1-ftp
