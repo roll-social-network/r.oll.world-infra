@@ -6,15 +6,15 @@ servers:
       docker_swarm_manager_host: true
       db_mode: primary
       roll_storage: mds1
-      ipv6_gateway: 2607:5300:205:200::1/64
+      ipv6_cidr: 2607:5300:205:200::1/56
     vps-9d706477.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.240.162
       db_mode: standby
-      ipv6_gateway: 2607:5300:201:3100::1/64
+      ipv6_cidr: 2607:5300:201:3100::1/56
     vps-acf71116.servers.r.oll.world:
       ansible_ssh_user: ubuntu
       advertise_addr: 144.217.243.18
       monitoring_prometheus: 'true'
       monitoring_grafana: 'true'
-      ipv6_gateway: 2607:5300:201:3100::1/64
+      ipv6_cidr: 2607:5300:201:3100::1/56
