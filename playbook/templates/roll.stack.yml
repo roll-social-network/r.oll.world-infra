@@ -45,6 +45,7 @@ services:
       ENABLE_SSO: 1
       SOCIAL_AUTH_ROLL_KEY: '{{ social_auth_roll_key }}'
       SOCIAL_AUTH_ROLL_SECRET: '{{ social_auth_roll_secret }}'
+      ROLL_OAUTH2_APPLICATION_ID: '3'
     deploy:
       replicas: 2
   db:
