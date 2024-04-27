@@ -52,4 +52,6 @@ jobs:
         SCRIPTS_DIR: /roll/scripts
         TWILIO_ARGS: ${{vars.TWILIO_API_KEY}} ${{secrets.TWILIO_API_SECRET}} ${{vars.TWILIO_ACCOUNT_SID}} ${{vars.TWILIO_MESSAGING_SERVICE_SID}}
         NEWRELIC_LICENSE_KEY: ${{secrets.NEWRELIC_LICENSE_KEY}}
+        SOCIAL_AUTH_ROLL_KEY: ${{vars.SOCIAL_AUTH_ROLL_KEY}}
+        SOCIAL_AUTH_ROLL_SECRET: ${{secrets.SOCIAL_AUTH_ROLL_SECRET}}
       run: pipenv run deploy --key-file .ansible_ssh_key

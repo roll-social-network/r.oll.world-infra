@@ -42,6 +42,9 @@ services:
       PHONE_AUTH_SMS_GATEWAY_ARGS: {{ twilio_args }}
       OVERRIDE_SCHEME: https
       OIDC_RSA_PRIVATE_KEY: /home/app/oidc.key
+      ENABLE_SSO: 1
+      SOCIAL_AUTH_ROLL_KEY: '{{ social_auth_roll_key }}'
+      SOCIAL_AUTH_ROLL_SECRET: '{{ social_auth_roll_secret }}'
     deploy:
       replicas: 2
   db:
