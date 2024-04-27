@@ -52,6 +52,12 @@
       dest: '{{ scripts_dir }}/db/{{ item.path }}'
     with_filetree: scripts/db
     when: item.state == 'file'
+  - name: Copy certs files
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ certs_dir }}/{{ item.path }}'
+    with_filetree: '{{ local_certs_dir }}'
+    when: item.state == 'file'
 
 - name: Setup DB
   hosts: servers

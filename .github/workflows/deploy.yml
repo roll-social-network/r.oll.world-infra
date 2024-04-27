@@ -29,6 +29,11 @@ jobs:
       run: |
         printf "\n" >> .ansible_ssh_key
         chmod 600 .ansible_ssh_key
+    - name: Create oidc.key
+      uses: "DamianReeves/write-file-action@master"
+      with:
+        path: certs/oidc.key
+        contents: ${{secrets.OIDC_KEY}}
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
