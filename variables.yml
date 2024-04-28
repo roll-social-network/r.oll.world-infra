@@ -1,6 +1,7 @@
 ---
-secret_key: '{{ lookup("env", "SECRET_KEY") }}'
+roll_servers_domain: '{{ lookup("env", "ROLL_SERVERS_DOMAIN") }}'
 roll_subdomain_base: '{{ lookup("env", "ROLL_SUBDOMAIN_BASE") }}'
+secret_key: '{{ lookup("env", "SECRET_KEY") }}'
 config_dir: '{{ lookup("env", "CONFIG_DIR") }}'
 scripts_dir: '{{ lookup("env", "SCRIPTS_DIR") }}'
 certs_dir: '{{ lookup("env", "CERTS_DIR") }}'

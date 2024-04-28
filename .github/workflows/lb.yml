@@ -21,6 +21,7 @@ jobs:
       uses: dawidd6/action-ansible-playbook@v2
       env:
         LOCAL_CERTS_DIR: ${{github.workspace}}/certs
+        ROLL_SERVERS_DOMAIN: ${{vars.ROLL_SERVERS_DOMAIN}}
         ROLL_SUBDOMAIN_BASE: ${{vars.ROLL_SUBDOMAIN_BASE}}
         CONFIG_DIR: /roll/config
         CERTS_DIR: /roll/certs
