@@ -21,10 +21,10 @@ services:
       STATIC_URL: https://{{ roll_subdomain_base }}/statics/
       MEDIA_URL: https://{{ roll_subdomain_base }}/medias/mds1/
       CSP_CONNECT_SRC: "'self',{{ roll_subdomain_base }},*.{{ roll_subdomain_base }}"
-      CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',statics.{{ roll_subdomain_base }},fonts.googleapis.com"
-      CSP_FONT_SRC: "'self',statics.{{ roll_subdomain_base }},fonts.gstatic.com"
-      CSP_SCRIPT_SRC: "'self','unsafe-eval',statics.{{ roll_subdomain_base }}"
-      CSP_IMG_SRC: "'self',data:,statics.{{ roll_subdomain_base }},mds1.{{ roll_subdomain_base }}"
+      CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',{{ roll_subdomain_base }},fonts.googleapis.com"
+      CSP_FONT_SRC: "'self',{{ roll_subdomain_base }},fonts.gstatic.com"
+      CSP_SCRIPT_SRC: "'self','unsafe-eval',{{ roll_subdomain_base }}"
+      CSP_IMG_SRC: "'self',data:,{{ roll_subdomain_base }}"
       STORAGES_DEFAULT_BACKEND: storages.backends.ftp.FTPStorage
       STORAGES_POSTS_BACKEND: storages.backends.ftp.FTPStorage
       THUMBNAIL_DEFAULT_STORAGE: storages.backends.ftp.FTPStorage
