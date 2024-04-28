@@ -16,7 +16,6 @@ services:
       # SITE_ID: 1
       SECRET_KEY: '{{ secret_key }}'
       DATABASES_DEFAULT: postgres://roll:roll@db/roll
-      SESSION_COOKIE_DOMAIN: '.{{ roll_subdomain_base }}'
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}
       CORS_ALLOWED_ORIGIN_REGEXES: "^https://\\w+\\.{{ roll_subdomain_base }}$$,^https://{{ roll_subdomain_base }}$$"
       STATIC_URL: https://{{ roll_subdomain_base }}/statics/
