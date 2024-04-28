@@ -18,12 +18,12 @@ services:
       DATABASES_DEFAULT: postgres://roll:roll@db/roll
       SUBDOMAIN_BASE: {{ roll_subdomain_base }}
       CORS_ALLOWED_ORIGIN_REGEXES: "^https://\\w+\\.{{ roll_subdomain_base }}$$,^https://{{ roll_subdomain_base }}$$"
-      STATIC_URL: https://{{ roll_subdomain_base }}/statics/
+      STATIC_URL: https://statics.{{ roll_subdomain_base }}/
       MEDIA_URL: https://{{ roll_subdomain_base }}/medias/mds1/
       CSP_CONNECT_SRC: "'self',{{ roll_subdomain_base }},*.{{ roll_subdomain_base }}"
-      CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',{{ roll_subdomain_base }},fonts.googleapis.com"
-      CSP_FONT_SRC: "'self',{{ roll_subdomain_base }},fonts.gstatic.com"
-      CSP_SCRIPT_SRC: "'self','unsafe-eval',{{ roll_subdomain_base }}"
+      CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',{{ roll_subdomain_base }},statics.{{ roll_subdomain_base }},fonts.googleapis.com"
+      CSP_FONT_SRC: "'self',{{ roll_subdomain_base }},statics.{{ roll_subdomain_base }},fonts.gstatic.com"
+      CSP_SCRIPT_SRC: "'self','unsafe-eval',{{ roll_subdomain_base }},statics.{{ roll_subdomain_base }}"
       CSP_IMG_SRC: "'self',data:,{{ roll_subdomain_base }}"
       STORAGES_DEFAULT_BACKEND: storages.backends.ftp.FTPStorage
       STORAGES_POSTS_BACKEND: storages.backends.ftp.FTPStorage
