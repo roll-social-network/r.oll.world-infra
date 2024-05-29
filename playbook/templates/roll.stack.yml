@@ -20,6 +20,7 @@ services:
       CORS_ALLOWED_ORIGIN_REGEXES: "^https://\\w+\\.{{ roll_subdomain_base }}$$,^https://{{ roll_subdomain_base }}$$"
       STATIC_URL: https://statics.{{ roll_subdomain_base }}/
       MEDIA_URL: /mds1/
+      DISABLE_MEDIA_PATH_AS_STATIC: 1
       CSP_CONNECT_SRC: "'self',{{ roll_subdomain_base }},*.{{ roll_subdomain_base }}"
       CSP_STYLE_SRC: "'self','unsafe-inline','unsafe-hashes',{{ roll_subdomain_base }},statics.{{ roll_subdomain_base }},fonts.googleapis.com"
       CSP_FONT_SRC: "'self',{{ roll_subdomain_base }},statics.{{ roll_subdomain_base }},fonts.gstatic.com"
@@ -41,7 +42,7 @@ services:
       PHONE_AUTH_SMS_GATEWAY_ARGS: {{ twilio_args }}
       OVERRIDE_SCHEME: https
       OIDC_RSA_PRIVATE_KEY: /home/app/oidc.key
-      ENABLE_SSO: 1
+      ENABLE_OIDC: 1
       SOCIAL_AUTH_ROLL_KEY: '{{ social_auth_roll_key }}'
       SOCIAL_AUTH_ROLL_SECRET: '{{ social_auth_roll_secret }}'
       ROLL_OAUTH2_APPLICATION_ID: '3'
