@@ -35,11 +35,11 @@ AUTHENTICATION_METHODS:
 - OIDC
 OIDC_CONFIGURATIONS:
   1:
+    OIDC_USE_PKCE: True
     OIDC_RP_SIGN_ALGO: 'RS256'
     OIDC_RP_CLIENT_ID: '{{ passwords_oidc_rp_client_id }}'
     OIDC_RP_CLIENT_SECRET: '{{ passwords_oidc_rp_client_secret }}'
     OIDC_RP_SCOPES: 'openid'
-    OIDC_RP_USE_PKCE: True
     OIDC_OP_JWKS_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/.well-known/jwks.json
     OIDC_OP_AUTHORIZATION_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/authorize/
     OIDC_OP_TOKEN_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/token/
