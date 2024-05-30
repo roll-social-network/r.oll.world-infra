@@ -70,7 +70,7 @@ services:
   smtp:
     image: bytemark/smtp:latest
     environment:
-      MAILNAME: monitoring.{{ roll_subdomain_base }}
+      MAILNAME: monitoring.{{ roll_servers_domain }}
     deploy:
       replicas: 1
 
