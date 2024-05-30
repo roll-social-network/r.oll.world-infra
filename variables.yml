@@ -25,3 +25,5 @@ passwords_activation_link_secret: '{{ lookup("env", "PASSWORDS_ACTIVATION_LINK_S
 passwords_db_secret: '{{ lookup("env", "PASSWORDS_DB_SECRET") }}'
 passwords_email_secret_salt: '{{ lookup("env", "PASSWORDS_EMAIL_SECRET_SALT") }}'
 passwords_private_key: '{{ lookup("env", "PASSWORDS_PRIVATE_KEY") }}'
+passwords_oidc_rp_client_id: '{{ lookup("env", "PASSWORDS_OIDC_RP_CLIENT_ID") }}'
+passwords_oidc_rp_client_secret: '{{ lookup("env", "PASSWORDS_OIDC_RP_CLIENT_SECRET") }}'
