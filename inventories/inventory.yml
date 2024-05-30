@@ -18,3 +18,4 @@ servers:
       monitoring_prometheus: 'true'
       monitoring_grafana: 'true'
       ipv6_cidr: 2607:5300:201:3100::1/56
+      passwords_db_mode: primary

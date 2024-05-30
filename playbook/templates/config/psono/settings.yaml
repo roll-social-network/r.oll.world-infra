@@ -1,0 +1,32 @@
+SECRET_KEY: '{{ passwords_secret_key }}'
+ACTIVATION_LINK_SECRET: '{{ passwords_activation_link_secret }}'
+DB_SECRET: '{{ passwords_db_secret }}'
+EMAIL_SECRET_SALT: '{{ passwords_email_secret_salt }}'
+PRIVATE_KEY: '{{ passwords_private_key }}'
+PUBLIC_KEY: '73b1259293ec615bcc1da2bb2e76a32194a160c8fa787d4220b5db8b0c3f2f59'
+DEBUG: False
+ALLOWED_HOSTS: ['*']
+ALLOWED_DOMAINS:
+- passwords.{{ roll_subdomain_base }}
+HOST_URL: 'https://passwords.{{ roll_subdomain_base }}/server'
+EMAIL_FROM: 'no-reply@passwords.{{ roll_servers_domain }}'
+EMAIL_HOST: 'smtp'
+EMAIL_PORT: 25
+DATABASES:
+  default:
+    ENGINE: django.db.backends.postgresql_psycopg2
+    NAME: roll-passwords
+    USER: roll-passwords
+    PASSWORD: roll-passwords
+    HOST: db
+    PORT: '5432'
+TEMPLATES:
+  - BACKEND: django.template.backends.django.DjangoTemplates
+    DIRS: ['/root/psono/templates']
+    APP_DIRS: True
+    OPTIONS:
+      context_processors:
+      - django.template.context_processors.debug
+      - django.template.context_processors.request
+      - django.contrib.auth.context_processors.auth
+      - django.contrib.messages.context_processors.messages
