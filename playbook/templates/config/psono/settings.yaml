@@ -33,9 +33,9 @@ TEMPLATES:
 AUTHENTICATION_METHODS:
 - AUTHKEY
 - OIDC
+OIDC_USE_PKCE: True
 OIDC_CONFIGURATIONS:
   1:
-    OIDC_USE_PKCE: True
     OIDC_RP_SIGN_ALGO: 'RS256'
     OIDC_RP_CLIENT_ID: '{{ passwords_oidc_rp_client_id }}'
     OIDC_RP_CLIENT_SECRET: '{{ passwords_oidc_rp_client_secret }}'
