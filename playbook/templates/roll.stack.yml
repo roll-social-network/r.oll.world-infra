@@ -46,6 +46,7 @@ services:
       SOCIAL_AUTH_ROLL_KEY: '{{ social_auth_roll_key }}'
       SOCIAL_AUTH_ROLL_SECRET: '{{ social_auth_roll_secret }}'
       ROLL_OAUTH2_APPLICATION_ID: '3'
+      OAUTH_PKCE_REQUIRED_LIST: '{{ social_auth_roll_key }}'
     deploy:
       replicas: 2
   db:
