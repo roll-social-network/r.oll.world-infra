@@ -4,7 +4,7 @@ DB_SECRET: '{{ passwords_db_secret }}'
 EMAIL_SECRET_SALT: '{{ passwords_email_secret_salt }}'
 PRIVATE_KEY: '{{ passwords_private_key }}'
 PUBLIC_KEY: '73b1259293ec615bcc1da2bb2e76a32194a160c8fa787d4220b5db8b0c3f2f59'
-DEBUG: False
+DEBUG: True
 ALLOWED_HOSTS: ['*']
 ALLOWED_DOMAINS:
 - passwords.{{ roll_subdomain_base }}
