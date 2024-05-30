@@ -30,3 +30,18 @@ TEMPLATES:
       - django.template.context_processors.request
       - django.contrib.auth.context_processors.auth
       - django.contrib.messages.context_processors.messages
+AUTHENTICATION_METHODS:
+- AUTHKEY
+- OIDC
+OIDC_CONFIGURATIONS:
+  1:
+    OIDC_RP_SIGN_ALGO: 'RS256'
+    OIDC_RP_CLIENT_ID: ''
+    OIDC_RP_CLIENT_SECRET: ''
+    OIDC_OP_JWKS_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/.well-known/jwks.json
+    OIDC_OP_AUTHORIZATION_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/authorize/
+    OIDC_OP_TOKEN_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/token/
+    OIDC_OP_USER_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/userinfo/
+    OIDC_USERNAME_ATTRIBUTE: passwords.email
+    AUTOPROVISION_PSONO_GROUP: False
+    AUTOPROVISION_PSONO_FOLDER: False

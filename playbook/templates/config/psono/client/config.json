@@ -12,7 +12,15 @@
   "disable_download_bar": false,
   "authentication_methods": [
     "AUTHKEY",
-    "LDAP"
+    "LDAP",
+    "OIDC"
+  ],
+  "oidc_provider": [
+    {
+      "title": "roll",
+      "provider_id": 1,
+      "button_name": "login with roll"
+    }
   ],
   "saml_provider": []
 }
