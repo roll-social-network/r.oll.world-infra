@@ -38,11 +38,12 @@ OIDC_CONFIGURATIONS:
     OIDC_RP_SIGN_ALGO: 'RS256'
     OIDC_RP_CLIENT_ID: '{{ passwords_oidc_rp_client_id }}'
     OIDC_RP_CLIENT_SECRET: '{{ passwords_oidc_rp_client_secret }}'
-    OIDC_RP_SCOPES: 'openid passwords'
+    OIDC_RP_SCOPES: 'profile passwords'
     OIDC_OP_JWKS_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/.well-known/jwks.json
     OIDC_OP_AUTHORIZATION_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/authorize/
     OIDC_OP_TOKEN_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/token/
     OIDC_OP_USER_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/userinfo/
     OIDC_EMAIL_ATTRIBUTE_NOT_PROVIDED: passwords_email
+    OIDC_USERNAME_ATTRIBUTE_NOT_PROVIDED: username
     AUTOPROVISION_PSONO_GROUP: False
     AUTOPROVISION_PSONO_FOLDER: False
