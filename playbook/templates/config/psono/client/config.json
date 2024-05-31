@@ -11,8 +11,6 @@
   "allow_lost_password": true,
   "disable_download_bar": false,
   "authentication_methods": [
-    "AUTHKEY",
-    "LDAP",
     "OIDC"
   ],
   "oidc_provider": [

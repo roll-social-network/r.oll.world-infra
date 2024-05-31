@@ -4,8 +4,9 @@ DB_SECRET: '{{ passwords_db_secret }}'
 EMAIL_SECRET_SALT: '{{ passwords_email_secret_salt }}'
 PRIVATE_KEY: '{{ passwords_private_key }}'
 PUBLIC_KEY: '73b1259293ec615bcc1da2bb2e76a32194a160c8fa787d4220b5db8b0c3f2f59'
-DEBUG: True
-ALLOWED_HOSTS: ['*']
+DEBUG: False
+ALLOWED_HOSTS:
+- passwords.{{ roll_subdomain_base }}
 ALLOWED_DOMAINS:
 - passwords.{{ roll_subdomain_base }}
 HOST_URL: 'https://passwords.{{ roll_subdomain_base }}/server'
@@ -31,8 +32,9 @@ TEMPLATES:
       - django.contrib.auth.context_processors.auth
       - django.contrib.messages.context_processors.messages
 AUTHENTICATION_METHODS:
-- AUTHKEY
 - OIDC
+ALLOW_REGISTRATION: False
+ALLOW_LOST_PASSWORD: False
 OIDC_CONFIGURATIONS:
   1:
     OIDC_RP_SIGN_ALGO: 'RS256'
@@ -43,7 +45,8 @@ OIDC_CONFIGURATIONS:
     OIDC_OP_AUTHORIZATION_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/authorize/
     OIDC_OP_TOKEN_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/token/
     OIDC_OP_USER_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/userinfo/
-    OIDC_USERNAME_ATTRIBUTE: username
+    OIDC_USERNAME_ATTRIBUTE: passwords_username
     OIDC_EMAIL_ATTRIBUTE: passwords_email
     AUTOPROVISION_PSONO_GROUP: False
     AUTOPROVISION_PSONO_FOLDER: False
+MANAGEMENT_ENABLED: True
