@@ -43,7 +43,7 @@ OIDC_CONFIGURATIONS:
     OIDC_OP_AUTHORIZATION_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/authorize/
     OIDC_OP_TOKEN_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/token/
     OIDC_OP_USER_ENDPOINT: https://{{ roll_subdomain_base }}/oauth2/userinfo/
-    OIDC_EMAIL_ATTRIBUTE_NOT_PROVIDED: passwords_email
-    OIDC_USERNAME_ATTRIBUTE_NOT_PROVIDED: username
+    OIDC_USERNAME_ATTRIBUTE: username
+    OIDC_EMAIL_ATTRIBUTE: passwords_email
     AUTOPROVISION_PSONO_GROUP: False
     AUTOPROVISION_PSONO_FOLDER: False
