@@ -6,9 +6,9 @@
     }
   ],
   "base_url": "https://passwords.{{ roll_subdomain_base }}/",
-  "allow_custom_server": true,
-  "allow_registration": true,
-  "allow_lost_password": true,
+  "allow_custom_server": false,
+  "allow_registration": false,
+  "allow_lost_password": false,
   "disable_download_bar": false,
   "authentication_methods": [
     "OIDC"
